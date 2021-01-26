@@ -1,7 +1,122 @@
+#include <fcntl.h>
+#include <setjmp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
 #include <unistd.h>
+
+typedef struct tag_MMAP_Node {
+  unsigned int Start_P;
+  unsigned int Start_V;
+  unsigned int length;
+  unsigned int refcount;
+  struct tag_MMAP_Node *next;
+} TMMAP_Node_t;
+
+TMMAP_Node_t *pTMMAPNode = NULL;
+#define PAGE_SIZE 0x1000
+#define PAGE_SIZE_MASK 0xfffff000
+
+static int fd = -1;
+static const char dev[] = "/dev/mem";
+jmp_buf *sigbus_jmp;
+
+//************************************************************
+void *memmap(unsigned long phy_addr, unsigned long size) {
+  unsigned long phy_addr_in_page;
+  unsigned long page_diff;
+  unsigned long size_in_page;
+  unsigned long value = 0;
+  TMMAP_Node_t *pTmp;
+  TMMAP_Node_t *pNew;
+  void *addr = NULL;
+  if (size == 0) {
+    printf("memmap():size can't be zero!\n");
+    return NULL;
+  }
+  /* проверить, было ли преобразовано пространство физической памяти */
+  pTmp = pTMMAPNode;
+  while (pTmp != NULL) {
+    if ((phy_addr >= pTmp->Start_P) &&
+        ((phy_addr + size) <= (pTmp->Start_P + pTmp->length))) {
+      pTmp->refcount++; /* referrence count increase by 1  */
+      return (void *)(pTmp->Start_V + phy_addr - pTmp->Start_P);
+    }
+    pTmp = pTmp->next;
+  }
+  /* not mmaped yet */
+  if (fd < 0) {
+    /* dev not opened yet, so open it */
+    fd = open(dev, O_RDWR | O_SYNC);
+    if (fd < 0) {
+      printf("memmap():open %s error!\n", dev);
+      return NULL;
+    }
+  }
+  /* addr align in page_size(4K) */
+  phy_addr_in_page = phy_addr & PAGE_SIZE_MASK;
+  page_diff = phy_addr - phy_addr_in_page;
+  /* size in page_size */
+  size_in_page = ((size + page_diff - 1) & PAGE_SIZE_MASK) + PAGE_SIZE;
+  addr = mmap((void *)0, size_in_page, PROT_READ | PROT_WRITE, MAP_SHARED, fd,
+              phy_addr_in_page);
+  if (addr == MAP_FAILED) {
+    printf("memmap():mmap @ 0x%lx error!\n", phy_addr_in_page);
+    return NULL;
+  }
+  /* add this mmap to MMAP Node */
+  pNew = (TMMAP_Node_t *)malloc(sizeof(TMMAP_Node_t));
+  if (NULL == pNew) {
+    printf("memmap():malloc new node failed!\n");
+    return NULL;
+  }
+  pNew->Start_P = phy_addr_in_page;
+  pNew->Start_V = (unsigned long)addr;
+  pNew->length = size_in_page;
+  pNew->refcount = 1;
+  pNew->next = NULL;
+  if (pTMMAPNode == NULL) {
+    pTMMAPNode = pNew;
+  } else {
+    pTmp = pTMMAPNode;
+    while (pTmp->next != NULL) {
+      pTmp = pTmp->next;
+    }
+    pTmp->next = pNew;
+  }
+  return (void *)(addr + page_diff);
+}
+
+#define DEFAULT_MD_LEN 256
+//************************************************************
+unsigned long GetValueRegister(unsigned long adress) {
+  void *pMem = NULL;
+  unsigned long value = -1;
+  jmp_buf sigbus_jmpbuf;
+  sigbus_jmp = &sigbus_jmpbuf;
+  if (sigsetjmp(sigbus_jmpbuf, 1) == 0) {
+    pMem = memmap(adress, DEFAULT_MD_LEN);
+    if (pMem == NULL) {
+      printf("memmap failed!\n");
+      return -1;
+    }
+    value = *(unsigned int *)pMem; //читаем региср
+  }
+  return value;
+}
+
+//************************************************************
+int SetValueRegister(unsigned long adress, unsigned long value) {
+  void *pMem = NULL;
+  pMem = memmap(adress, DEFAULT_MD_LEN);
+  if (pMem == NULL) {
+    printf("memmap failed!\n");
+    return -1;
+  }
+  *(unsigned int *)pMem = value; //пишем в регистр
+  return 0;
+}
 
 //************************************************************
 void print_bin(unsigned long data) {
@@ -113,7 +228,7 @@ int main() {
   Chip_Id = 0x3516E200;
   printf("========== Hisilicon GPIO Scaner (2020) Andrew_kmr - OpenIPC.org "
          "collective ==========\n");
-  printf("Chip_Id: 0x%08X\n", Chip_Id);
+  printf("Chip_Id: 0x%08lX\n", Chip_Id);
   printf("---------------------------------------------------------------------"
          "-----------------\n");
   get_gpio_adress(&Chip_Id, &GPIO_Groups, &GPIO_Base, &GPIO_Offset);
