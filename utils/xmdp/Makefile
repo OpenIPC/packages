@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011-2014 OpenWrt.org
+# Copyright (C) 2013-2021 OpenIPC.org
 #
 # This is free software, licensed under the MIT License.
 # See /LICENSE for more information.
@@ -30,11 +30,11 @@ endef
 
 define Build/Prepare
 	$(INSTALL_DIR) $(PKG_BUILD_DIR)
-	cp -ar ./src/* $(PKG_BUILD_DIR)/
+	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 
 define Build/Compile
-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -O -g -D LINUX -o $(PKG_BUILD_DIR)/$(PKG_NAME) \
+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -O -g -D LINUX -std=c99 -o $(PKG_BUILD_DIR)/$(PKG_NAME) \
 	$(PKG_BUILD_DIR)/xmdp.c $(PKG_BUILD_DIR)/netip.c $(PKG_BUILD_DIR)/utils.c $(PKG_BUILD_DIR)/cjson/cJSON.c
 endef
 
