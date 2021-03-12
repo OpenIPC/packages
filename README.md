@@ -1,1 +1,1 @@
-# hisi-gpio
+# New OpenIPC custom repo
