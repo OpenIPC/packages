@@ -1,2 +1,2 @@
-# New OpenIPC packages feed
+# New OpenIPC packages feed - futurum
 
