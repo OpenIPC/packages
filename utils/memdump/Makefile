@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=memdump
 PKG_VERSION:=0.1
 PKG_RELEASE:=latest
-PKG_MAINTAINER:=Maxim Patrushev <hidden@shadow.org>
+PKG_MAINTAINER:=Maksim Patrushev <330379404icq@gmail.com>
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,7 +21,7 @@ define Package/$(PKG_NAME)
 	SECTION:=utils
 	CATEGORY:=Utilities
 	TITLE:=An alternative simple utility for getting dumps from memory
-	MAINTAINER:=Maxim Patrushev <hidden@shadow.org>
+	MAINTAINER:=Maksim Patrushev <330379404icq@gmail.com>
 endef
 
 define Package/$(PKG_NAME)/description
