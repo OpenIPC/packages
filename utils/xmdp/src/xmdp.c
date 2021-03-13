@@ -204,7 +204,7 @@ int main() {
     }
 
     printf("%s%s\t%s\t%s %s, %s", netip_ok ? FgRed : "", host_ip, mac,
-           chan_num == 1 ? "IPC" : "DVR", sn, hostname);
+           chan_num > 1 ? "DVR" : "IPC", sn, hostname);
     if (strlen(verstr))
       printf("\t%s", verstr);
     printf("%s\n", netip_ok ? Reset : "");
