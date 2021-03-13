@@ -1,6 +1,6 @@
 # HISI_GPIO_SCANNER
 
-Utility for finding GPIO staus
+Utility for diagnosing and displaying GPIO statuses
 
 ### Example compilation in OpenIPC root dir
 
