@@ -30,7 +30,7 @@ typedef struct netip_preabmle {
   uint8_t cur;
   uint16_t msgid;
   uint32_t len_data;
-  char data[0];
+  char data[];
 } PACKED netip_preabmle_t;
 
 #define MAX_UDP_PACKET_SIZE 0xFFFF

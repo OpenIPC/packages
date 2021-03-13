@@ -54,19 +54,18 @@ int ipaddr_from32bit(char *dst, size_t dlen, const char *coded) {
 }
 
 int bsock;
-struct hostent *he;
 
 void send_netip_broadcast() {
-  struct sockaddr_in their_addr;
-  their_addr.sin_family = AF_INET;         // host byte order
-  their_addr.sin_port = htons(SERVERPORT); // short, network byte order
-  their_addr.sin_addr = *((struct in_addr *)he->h_addr);
-  memset(their_addr.sin_zero, '\0', sizeof their_addr.sin_zero);
+  struct sockaddr_in sa;
+  memset(sa.sin_zero, '\0', sizeof sa.sin_zero);
+
+  sa.sin_family = AF_INET;
+  sa.sin_addr.s_addr = 0xffffffff;
+  sa.sin_port = htons(SERVERPORT);
 
   int rcvbts;
-  if ((rcvbts =
-           sendto(bsock, brpkt, sizeof brpkt, 0, (struct sockaddr *)&their_addr,
-                  sizeof(struct sockaddr_in))) == -1) {
+  if ((rcvbts = sendto(bsock, brpkt, sizeof brpkt, 0, (struct sockaddr *)&sa,
+                       sizeof(struct sockaddr_in))) == -1) {
     perror("sendto");
     exit(1);
   }
@@ -103,11 +102,6 @@ int main() {
     exit(1);
   }
 
-  if ((he = gethostbyname("255.255.255.255")) == NULL) { // get the host info
-    perror("gethostbyname");
-    exit(1);
-  }
-
   send_netip_broadcast();
 
   printf("Searching for XM cameras... Abort with CTRL+C.\n\n"
@@ -133,7 +127,6 @@ int main() {
     if (rcvbts <= sizeof brpkt)
       continue;
 
-    char saddr[INET6_ADDRSTRLEN];
     buf[rcvbts] = '\0';
 
     cJSON *json = cJSON_Parse(buf + 20);
