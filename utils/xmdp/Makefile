@@ -34,7 +34,7 @@ define Build/Prepare
 endef
 
 define Build/Compile
-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -O -g -D LINUX -std=c99 -o $(PKG_BUILD_DIR)/$(PKG_NAME) \
+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -O -g -D LINUX -std=c99 -Wall -Wpedantic -lm -o $(PKG_BUILD_DIR)/$(PKG_NAME) \
 	$(PKG_BUILD_DIR)/xmdp.c $(PKG_BUILD_DIR)/netip.c $(PKG_BUILD_DIR)/utils.c $(PKG_BUILD_DIR)/cjson/cJSON.c
 endef
 
