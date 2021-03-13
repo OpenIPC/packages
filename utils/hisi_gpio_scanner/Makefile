@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=hisi_gpio_scanner
 PKG_VERSION:=0.1
 PKG_RELEASE:=latest
-PKG_MAINTAINER:=Maksim Patrushev <330379404icq@gmail.com>
+PKG_MAINTAINER:=Andrew_kmr <Andrew_kmr@mail.ru>
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,7 +21,7 @@ define Package/$(PKG_NAME)
 	SECTION:=utils
 	CATEGORY:=Utilities
 	TITLE:=Utility for diagnosing and displaying GPIO statuses
-	MAINTAINER:=Maksim Patrushev <330379404icq@gmail.com>
+	MAINTAINER:=Andrew_kmr <Andrew_kmr@mail.ru>
 endef
 
 define Package/$(PKG_NAME)/description
