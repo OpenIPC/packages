@@ -64,8 +64,9 @@ void send_netip_broadcast() {
   sa.sin_port = htons(SERVERPORT);
 
   int rcvbts;
-  if ((rcvbts = sendto(bsock, brpkt, sizeof brpkt, 0, (struct sockaddr *)&sa,
-                       sizeof(struct sockaddr_in))) == -1) {
+  if ((rcvbts = sendto(bsock, brpkt, sizeof(brpkt) - 1, 0,
+                       (struct sockaddr *)&sa, sizeof(struct sockaddr_in))) ==
+      -1) {
     perror("sendto");
     exit(1);
   }
@@ -151,6 +152,7 @@ int main() {
     const char *mac = get_json_strval(netcommon, "MAC", "");
     const char *host_ip = get_json_strval(netcommon, "HostIP", "");
     const int netip_port = get_json_intval(netcommon, "TCPPort", 0);
+    const int chan_num = get_json_intval(netcommon, "ChannelNum", 0);
     const char *sn = get_json_strval(netcommon, "SN", "");
     const char *version = get_json_strval(netcommon, "Version", "");
     const char *builddt = get_json_strval(netcommon, "BuildDate", "");
@@ -201,8 +203,8 @@ int main() {
       }
     }
 
-    printf("%s%s\t%s\t%s, %s", netip_ok ? FgRed : "", host_ip, mac, sn,
-           hostname);
+    printf("%s%s\t%s\t%s %s, %s", netip_ok ? FgRed : "", host_ip, mac,
+           chan_num == 1 ? "IPC" : "DVR", sn, hostname);
     if (strlen(verstr))
       printf("\t%s", verstr);
     printf("%s\n", netip_ok ? Reset : "");
