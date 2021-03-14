@@ -1,6 +1,6 @@
 # HISI_GPIO_WATCHER
 
-Utility for executing commands when changing GPIO statuses
+Utility for run commands when changing GPIO statuses
 
 ### Example compilation in OpenIPC root dir
 

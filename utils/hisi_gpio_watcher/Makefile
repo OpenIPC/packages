@@ -21,12 +21,12 @@ define Package/$(PKG_NAME)
 	SECTION:=openipc
 	CATEGORY:=OpenIPC
 	SUBMENU:=Utils
-	TITLE:=Utility for executing commands when changing GPIO statuses
+	TITLE:=Utility for run commands when changing GPIO statuses
 	MAINTAINER:=Maksim Patrushev <330379404icq@gmail.com>
 endef
 
 define Package/$(PKG_NAME)/description
-  Utility for executing commands when changing GPIO statuses
+  Utility for run commands when changing GPIO statuses
 endef
 
 define Build/Prepare
