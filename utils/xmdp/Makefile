@@ -18,8 +18,9 @@ PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
 define Package/$(PKG_NAME)
-	SECTION:=utils
-	CATEGORY:=Utilities
+	SECTION:=openipc
+	CATEGORY:=OpenIPC
+	SUBMENU:=Utils
 	TITLE:=Utility for finding devices that support the NETIP protocol
 	MAINTAINER:=Dmitry Ilyin <dima@doty.ru>
 endef

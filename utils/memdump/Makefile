@@ -18,8 +18,9 @@ PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
 define Package/$(PKG_NAME)
-	SECTION:=utils
-	CATEGORY:=Utilities
+	SECTION:=openipc
+	CATEGORY:=OpenIPC
+	SUBMENU:=Utils
 	TITLE:=An alternative simple utility for getting dumps from memory
 	MAINTAINER:=Maksim Patrushev <330379404icq@gmail.com>
 endef

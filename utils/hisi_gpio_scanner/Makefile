@@ -18,8 +18,9 @@ PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
 define Package/$(PKG_NAME)
-	SECTION:=utils
-	CATEGORY:=Utilities
+	SECTION:=openipc
+	CATEGORY:=OpenIPC
+	SUBMENU:=Utils
 	TITLE:=Utility for diagnosing and displaying GPIO statuses
 	MAINTAINER:=Andrew_kmr <Andrew_kmr@mail.ru>
 endef

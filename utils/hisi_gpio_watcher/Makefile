@@ -18,8 +18,9 @@ PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
 define Package/$(PKG_NAME)
-	SECTION:=utils
-	CATEGORY:=Utilities
+	SECTION:=openipc
+	CATEGORY:=OpenIPC
+	SUBMENU:=Utils
 	TITLE:=Utility for executing commands when changing GPIO statuses
 	MAINTAINER:=Maksim Patrushev <330379404icq@gmail.com>
 endef
