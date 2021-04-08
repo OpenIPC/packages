@@ -8,18 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipctool
-PKG_VERSION:=2021.03
+PKG_VERSION:=master
 PKG_RELEASE:=latest
 PKG_MAINTAINER:=Dmitry Ilyin <dima@doty.ru>
-
-include $(INCLUDE_DIR)/package.mk
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/OpenIPC/ipctool.git
-#PKG_SOURCE_VERSION:=763a2749afadfd752a66eb073b8802bd6a5149d1
+PKG_SOURCE_VERSION:=3c21f3c914b5f55fee9243a517f22b47ee3eeb24
 
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -41,9 +39,16 @@ define Package/$(PKG_NAME)/description
     New util for get info from IPCamera (Hisi) SoC's
 endef
 
+CMAKE_OPTIONS += -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+
+define Build/Prepare
+	(cd $(PKG_BUILD_DIR) && tar --strip-components 1 -xvzf $(DL_DIR)/$(PKG_SOURCE))
+endef
+
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ipcinfo $(1)/usr/bin/
 
 endef
 
