@@ -77,13 +77,16 @@ endif
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
+PKG_BUILD_DEPENDS:=libevent2 libjson-c lame-lib libpthread hisi-osdrv$(OSDRV_VERSION)-lib
+
+
 define Package/$(PKG_NAME)
 	SECTION:=openipc
 	CATEGORY:=OpenIPC
 	SUBMENU:=Utils
 	TITLE:=Tiny but powerful IPC streaming software
 	MAINTAINER:=Dmitry Ilyin <dima@doty.ru>
-	DEPENDS:=@(TARGET_hi35xx) +libevent2 +libjson-c +lame-lib +hisi-osdrv$(OSDRV_VERSION)-lib
+	DEPENDS:=@(TARGET_hi35xx) +libevent2 +libjson-c +lame-lib +libpthread +hisi-osdrv$(OSDRV_VERSION)-lib
 endef
 
 define Package/$(PKG_NAME)/description
