@@ -77,8 +77,6 @@ endif
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_BUILD_DEPENDS:=libevent2 libjson-c lame-lib libpthread hisi-osdrv$(OSDRV_VERSION)-lib
-
 
 define Package/$(PKG_NAME)
 	SECTION:=openipc
