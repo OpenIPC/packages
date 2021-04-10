@@ -17,7 +17,7 @@ PKG_LICENSE_FILES:=LICENSE
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/OpenIPC/ipctool.git
-PKG_SOURCE_VERSION:=360ba07038af31d3f9c64fee44d88086c92e6676
+PKG_SOURCE_VERSION:=3c21f3c914b5f55fee9243a517f22b47ee3eeb24
 
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -30,13 +30,13 @@ define Package/$(PKG_NAME)
 	SECTION:=openipc
 	CATEGORY:=OpenIPC
 	SUBMENU:=Utils
-	TITLE:=New util for get info from IPCamera SoC's
+	TITLE:=New util for get info from IPCamera SoCs
 	MAINTAINER:=Dmitry Ilyin <dima@doty.ru>
 	DEPENDS:=@(TARGET_hi35xx)
 endef
 
 define Package/$(PKG_NAME)/description
-    New util for get info from IPCamera (Hisi) SoC's
+    New util for get info from IPCamera (Hisi) SoCs
 endef
 
 CMAKE_OPTIONS += -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
