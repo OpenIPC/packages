@@ -17,7 +17,7 @@ PKG_LICENSE_FILES:=LICENSE
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/OpenIPC/ipctool.git
-PKG_SOURCE_VERSION:=360ba07038af31d3f9c64fee44d88086c92e6676
+PKG_SOURCE_VERSION:=04b2eec1f6d2cbb053548257836e6a7bbebf9d93
 
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -39,7 +39,7 @@ define Package/$(PKG_NAME)/description
     New util for get info from IPCamera (Hisi) SoC's
 endef
 
-CMAKE_OPTIONS += -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+CMAKE_OPTIONS += -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DSKIP_VERSION=ON
 
 define Build/Prepare
 	(cd $(PKG_BUILD_DIR) && tar --strip-components 1 -xvzf $(DL_DIR)/$(PKG_SOURCE))
