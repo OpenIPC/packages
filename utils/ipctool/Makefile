@@ -30,13 +30,13 @@ define Package/$(PKG_NAME)
 	SECTION:=openipc
 	CATEGORY:=OpenIPC
 	SUBMENU:=Utils
-	TITLE:=New util for get info from IPCamera SoC's
+	TITLE:=New util for get info from IPCamera SoCs
 	MAINTAINER:=Dmitry Ilyin <dima@doty.ru>
 	DEPENDS:=@(TARGET_hi35xx)
 endef
 
 define Package/$(PKG_NAME)/description
-    New util for get info from IPCamera (Hisi) SoC's
+    New util for get info from IPCamera (Hisi) SoCs
 endef
 
 CMAKE_OPTIONS += -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DSKIP_VERSION=ON
