@@ -1,6 +1,6 @@
 ## OpenIPC packages
 
-New packages feed **futurum** for IP cameras and NVRs based on the HiSilicon SoCs
+New packages feed **futurum** for IP cameras and NVRs based on the HiSilicon (and other) SoC's
 
 More information about project on our website [https://openipc.org](https://openipc.org)
 
