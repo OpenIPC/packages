@@ -1,0 +1,106 @@
+<%
+local util = require "luci.util"
+local ntm = require "luci.model.network".init()
+local LIP = require 'luci.LIP'
+local wan = ntm:get_wannet()
+
+local ps = luci.util.exec("/bin/busybox pgrep majestic")
+local pstext
+if ps == ""  then
+    pstext = "/usr/bin/majestic not running"
+else
+    pstext = "/usr/bin/majestic running as pid "..ps
+end
+
+if wan then
+	host_ipaddr  = wan:ipaddr()
+end
+
+tbl = LIP.load('/etc/majestic.yaml')
+host_webport = tbl['system']['web_port']
+host_rtspport = tbl['rtsp']['port']
+
+ns = luci.util.exec("netstat -p |grep majestic | tr ':' ' ' | awk -F ' ' '{print $5,$6}'")
+nstbl = {}
+nstbl_i = 1
+for line in ns:gmatch '[^\n]+' do
+    fstbl = {}
+    fstbl_i = 1
+    for fs in line:gmatch '%S+' do
+        fstbl[fstbl_i] = fs
+        fstbl_i = fstbl_i + 1
+    end
+    nstbl[nstbl_i] = {clientip = fstbl[2], port = fstbl[1]}
+    nstbl_i = nstbl_i + 1
+end
+
+%>
+
+<%+header%>
+
+<h2><a id="content" name="content">Majestic Service</a></h2>
+
+<fieldset class="cbi-section">
+	<legend>Service Status</legend>
+	<div class="cbi-map-descr">This shows you the status of the Majestic service and provides control over starting, stopping, restarting the service.</div>
+		<table width="100%" cellspacing="10">
+		<tr class="cbi-section-table-titles">
+		<th class="cbi-section-table-cell">Process</th>
+		<th class="cbi-section-table-cell">Control</th>
+		</tr>
+		<tr><td width="33%">
+			<%=pstext%>
+		</td><td>
+		<form method="post" action="<% luci.http.write(luci.dispatcher.build_url("admin/ipcam/service/control")) %>">
+		<input class="cbi-button cbi-input-apply" type="submit" name="action" id="start" value="Start">
+		<input class="cbi-button cbi-input-reload" type="submit" name="action" id="restart" value="Restart">
+		<input class="cbi-button cbi-input-remove" type="submit" name="action" id="stop" value="Stop">
+		</form>
+		</td>
+		</tr>
+		</td></tr>
+		</table>
+</fieldset>
+
+<fieldset class="cbi-section">
+	<legend>Access URL's</legend>
+	<div class="cbi-map-descr">You access Majestic's services via the URLs provided below.</div>
+	<table width="100%" cellspacing="10">
+		<tr><td width="33%">MJPEG & MP3 stream</td><td><a href="http://<%=host_ipaddr%>:8888" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%></a></td></tr>
+		<tr><td width="33%">JPEG</td><td><a href="http://<%=host_ipaddr%>:8888/image.jpg" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/image.jpg</a></td></tr>
+		<tr><td width="33%">JPEG Options</td><td><a href="http://<%=host_ipaddr%>:8888/image.jpg?width=640&height=360&qfactor=73&color2gray=1" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/image.jpg?width=640&height=360&qfactor=73&color2gray=1</a></td></tr>
+		<tr><td width="33%">RAW (only for 16cv300/16ev100 and better processor)</td><td><a href="http://<%=host_ipaddr%>:8888/image.dng" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/image.dng</a></td></tr>
+		<tr><td width="33%">MJPEG Embedded</td><td><a href="http://<%=host_ipaddr%>:8888/mjpeg.html" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/mjpeg.html</a></td></tr>
+		<tr><td width="33%">H264 Embedded</td><td><a href="http://<%=host_ipaddr%>:8888/video.html" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/video.html</a></td></tr>
+	 	<tr><td width="33%">MJPEG</td><td><a href="http://<%=host_ipaddr%>:8888/mjpeg" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/mjpeg</a></td></tr>
+		<tr><td width="33%">H264</td><td><a href="http://<%=host_ipaddr%>:8888/video.mp4" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/video.mp4</a></td></tr>
+		<tr><td width="33%">MP3</td><td><a href="http://<%=host_ipaddr%>:8888/stream.mp3" target="_blank">http://<%=host_ipaddr%>:<%=host_webport%>/stream.mp3</a></td></tr>
+
+		<tr><td width="33%">RTSP Demo</td><td><a href="rtsp://<%=host_ipaddr%>:554/demo" target="_blank">rtsp://<%=host_ipaddr%>:<%=host_rtspport%>/demo</a></td></tr>
+		<tr><td width="33%">RTSP Stream 9</td><td><a href="rtsp://<%=host_ipaddr%>:554/stream=0" target="_blank">rtsp://<%=host_ipaddr%>:<%=host_rtspport%>/stream=0</a></td></tr>
+		<tr><td width="33%">RTSP Stream 1</td><td><a href="rtsp://<%=host_ipaddr%>:554/stream=1" target="_blank">rtsp://<%=host_ipaddr%>:<%=host_rtspport%>/stream=1</a></td></tr>
+	</table>
+</fieldset>
+
+<fieldset class="cbi-section">
+		<legend>Activate Connections</legend>
+		<div class="cbi-map-descr">This shows active clients connected to Majestic.</div>
+		<div class="cbi-section-node">
+			<table class="cbi-section-table">
+				<tbody><tr class="cbi-section-table-titles">
+					<th class="cbi-section-table-cell">Service/Port</th>
+					<th class="cbi-section-table-cell">Client IP</th>
+				</tr>
+<% for index, data in pairs(nstbl) do %>
+<tr class="cbi-section-table-row cbi-rowstyle-1">
+ 	<% for value, value2 in pairs(data) do %>
+		<td class="cbi-value-field">
+        <%=value2%>
+        </tD>
+    <% end %>
+</tr><% end %>	
+		</tbody></table>
+		</div>
+</fieldset>
+
+<%+footer%>
