@@ -4,6 +4,11 @@ New packages feed **futurum** for IP cameras and NVRs based on the HiSilicon (an
 
 More information about project on our website [https://openipc.org](https://openipc.org)
 
+![GitHub repo size](https://img.shields.io/github/repo-size/OpenIPC/packages)
+![GitHub issues](https://img.shields.io/github/issues/OpenIPC/packages)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/OpenIPC/packages)
+[![License](https://img.shields.io/github/license/OpenIPC/packages)](https://opensource.org/licenses/MIT)
+
 -----
 
 ### Supporting
