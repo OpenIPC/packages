@@ -42,7 +42,8 @@ int ipaddr_from32bit(char *dst, size_t dlen, const char *coded) {
 
   unsigned char octet[4];
   char cnvt[5] = "0x01";
-  for (int i = 0; i < sizeof(octet); i++) {
+  int i;
+  for (i = 0; i < sizeof(octet); i++) {
     cnvt[2] = coded[i * 2 + 2];
     cnvt[3] = coded[i * 2 + 3];
     sscanf(cnvt, "%hhx", &octet[i]);
@@ -160,7 +161,8 @@ int main() {
     uint32_t numipv4;
     if (sscanf(host_ip, "0x%x", &numipv4) == 1) {
       // find occurence
-      for (int i = 0; i < seen_len; i++)
+      int i;
+      for (i = 0; i < seen_len; i++)
         if (seen_vec[i] == numipv4)
           goto skip_loop;
       if (seen_len == seen_cap) {
