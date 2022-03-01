@@ -13,7 +13,7 @@ More information about project on our website [https://openipc.org](https://open
 
 ### Supporting
 
-If you like our work, please consider supporting us on [OpenCollective](https://opencollective.com/openipc/contribute/backer-14335/checkout).
+If you like our work, please consider supporting us on [Open Collective](https://opencollective.com/openipc/contribute/backer-14335/checkout).
 
 [![Backers](https://opencollective.com/openipc/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/openipc)
 [![Backers](https://opencollective.com/openipc/tiers/badge.svg)](https://opencollective.com/openipc)
